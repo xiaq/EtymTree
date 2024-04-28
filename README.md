@@ -1,0 +1,1 @@
+## Installation```stMetacello new	repository: 'github://xiaq/EtymTree:main/src';	baseline: 'EtymTree';	load```## Load Lepiter				After installing with Metacello, you will be able to execute```#BaselineOfEtymTree asClass loadLepiter```
