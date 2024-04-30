@@ -11,9 +11,32 @@ Class {
 { #category : #accessing }
 EtWord class >> langCodeToName [
 	^ Dictionary newFrom: {
+		" Latin and Romance languages I'm interested in "
 		'la' -> 'Latin'.
+		'fr' -> 'French'.
+		'fro' -> 'Old French'.
+		'frm' -> 'Middle French'.
+		'es' -> 'Spanish'.
+		'it' -> 'Italian'.
+		
+		" Germanic languages I'm interested in "
 		'en' -> 'English'.
+		'enm' -> 'Middle English'.
+		'ang' -> 'Old English'.
+		'nl' -> 'Dutch'.
+		"
+		'dum' -> 'Middle Dutch'.
+		'odt' -> 'Old Dutch'.
+		"
 		'de' -> 'German'.
+		"
+		'gmh' -> 'Middle High German'.
+		'goh' -> 'Old High German'.
+		"
+		'gmw-pro' -> 'Proto-West Germanic'.
+		'non' -> 'Old Norse'.
+		'gem-pro' -> 'Proto-Germanic'.
+		
 		'ine-pro' -> 'Proto-Indo-European'.
 	}
 ]
@@ -55,4 +78,9 @@ EtWord >> page [
 		^ 'Reconstruction:', self langName, '/', headword
 	].
 	^ headword
+]
+
+{ #category : #accessing }
+EtWord >> printOn: aStream [
+	aStream nextPutAll: headword, ' (', lang, ')'
 ]

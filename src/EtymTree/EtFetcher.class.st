@@ -5,6 +5,67 @@ Class {
 }
 
 { #category : #accessing }
+EtFetcher class >> allRegexMatches: str regex: r do: block [
+	| stream rx |
+	stream := str readStream.
+	rx := r asRegex.
+	[rx searchStream: stream] whileTrue: [
+		block value: ((2 to: rx subexpressionCount) collect: [:i | rx subexpression: i])
+	]
+]
+
+{ #category : #accessing }
+EtFetcher class >> fetchRecursiveRelations: word [
+	| relations visitedWords nextWords |
+	relations := OrderedCollection new.
+	visitedWords := Set new.
+	nextWords := { word } asSet.
+	[ nextWords size > 0 ] whileTrue: [
+		| w newRelations |
+		w := nextWords atRandom.
+		nextWords remove: w.
+		visitedWords add: w.
+		newRelations := self fetchRelations: w.
+		relations addAll: newRelations.
+		newRelations do: [:r |
+			| w2 |
+			w2 := r to.
+			(visitedWords includes: w2) ifFalse: [
+				nextWords add: w2.
+			]
+		]
+	].
+	^ relations.
+]
+
+{ #category : #accessing }
+EtFetcher class >> fetchRelations: word [
+	| deriveRx inheritRx text relations cognateRx |
+	text := EtFetcher fetchWordText: word.
+	relations := OrderedCollection new.
+	
+	inheritRx := '\{\{inh(erited)?\|[^|}]*\|([^|}]*)\|([^|}]*)'.
+	EtFetcher allRegexMatches: text regex: inheritRx do: [:sub |
+		| to |
+		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
+		relations add: (EtRelation new from: word to: to type: #inherit)
+	].
+	deriveRx := '\{\{der(ived)?\|[^|}]*\|([^|}]*)\|([^|}]*)' .
+	EtFetcher allRegexMatches: text regex: deriveRx do: [:sub |
+		| to |
+		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
+		relations add: (EtRelation new from: word to: to type: #derive)
+	].
+	cognateRx := '\{\{cog(nate)?\|([^|}]*)\|([^|}]*)'.
+	EtFetcher allRegexMatches: text regex: cognateRx do: [:sub |
+		| to |
+		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
+		relations add: (EtRelation new from: word to: to type: #cognate)
+	].
+	^ relations select: [:w | EtWord supportedLang: w to lang]
+]
+
+{ #category : #accessing }
 EtFetcher class >> fetchWordText: word [
 	"Fetch the word from Wiktionary and returns its wikitext.
 	Returns an empty string if the word is not found."

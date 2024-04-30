@@ -29,6 +29,15 @@ EtRelation >> from: a to: b type: t [
 ]
 
 { #category : #accessing }
+EtRelation >> printOn: aStream [
+	from printOn: aStream.
+	aStream nextPutAll: ' --'.
+	type printOn: aStream.
+	aStream nextPutAll: '--> '.
+	to printOn: aStream.
+]
+
+{ #category : #accessing }
 EtRelation >> to [ 
 	^ to
 ]
