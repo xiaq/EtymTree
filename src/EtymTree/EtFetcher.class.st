@@ -48,6 +48,7 @@ EtFetcher class >> fetchRecursiveRelations: word maxIterations: maxIterations [
 	i := 0.
 	[ nextWords size > 0 ] whileTrue: [
 		| w newRelations |
+		Transcript print: ('#{1}: nextWords: {2}, relations: {3}' format: {i. nextWords size. relations size}); cr.
 		w := nextWords atRandom.
 		nextWords remove: w.
 		visitedWords add: w.

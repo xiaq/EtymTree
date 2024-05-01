@@ -12,29 +12,30 @@ Class {
 EtWord class >> langCodeToName [
 	^ Dictionary newFrom: {
 		" Latin and Romance languages I'm interested in "
-		'la' -> 'Latin'.
 		'fr' -> 'French'.
+		'la' -> 'Latin'.
+		"
 		'fro' -> 'Old French'.
 		'frm' -> 'Middle French'.
 		'es' -> 'Spanish'.
 		'it' -> 'Italian'.
+		"
 		
 		" Germanic languages I'm interested in "
 		'en' -> 'English'.
+		'nl' -> 'Dutch'.
+		'de' -> 'German'.
+		'non' -> 'Old Norse'.
+
+		"
 		'enm' -> 'Middle English'.
 		'ang' -> 'Old English'.
-		'nl' -> 'Dutch'.
-		"
 		'dum' -> 'Middle Dutch'.
 		'odt' -> 'Old Dutch'.
-		"
-		'de' -> 'German'.
-		"
 		'gmh' -> 'Middle High German'.
 		'goh' -> 'Old High German'.
-		"
 		'gmw-pro' -> 'Proto-West Germanic'.
-		'non' -> 'Old Norse'.
+		"
 		'gem-pro' -> 'Proto-Germanic'.
 		
 		'ine-pro' -> 'Proto-Indo-European'.
