@@ -26,16 +26,15 @@ EtWord class >> langCodeToName [
 		'nl' -> 'Dutch'.
 		'de' -> 'German'.
 		'non' -> 'Old Norse'.
-
-		"
 		'enm' -> 'Middle English'.
 		'ang' -> 'Old English'.
+		"
 		'dum' -> 'Middle Dutch'.
 		'odt' -> 'Old Dutch'.
 		'gmh' -> 'Middle High German'.
 		'goh' -> 'Old High German'.
-		'gmw-pro' -> 'Proto-West Germanic'.
 		"
+		'gmw-pro' -> 'Proto-West Germanic'.
 		'gem-pro' -> 'Proto-Germanic'.
 		
 		'ine-pro' -> 'Proto-Indo-European'.

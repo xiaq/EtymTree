@@ -41,8 +41,9 @@ EtTree class >> viewRelations: relations [
 					border: (BlBorder paint: Color gray);
 					background: Color gray)
 		].
+	" #descendant is like #inherit, but the arrow goes in the opposite direction. "
 	self addEdges: m
-		relations: (relations select: [:r | r type = #derive])
+		relations: (relations select: [:r | r type = #descendant])
 		do: [:line |
 			line fromHead:
 				(BlArrowheadTriangle new
@@ -50,6 +51,7 @@ EtTree class >> viewRelations: relations [
 					border: (BlBorder paint: Color gray);
 					background: Color gray)
 		].
+	" #derive is like #inherit, but the arrow is hollow. "
 	self addEdges: m
 		relations: (relations select: [:r | r type = #derive])
 		do: [:line |
@@ -58,6 +60,7 @@ EtTree class >> viewRelations: relations [
 					scale: 4;
 					border: (BlBorder paint: Color gray))
 		].
+	" #cognate is symmetric. "
 	self addEdges: m
 		relations: (relations select: [:r | r type = #cognate])
 		do: [:line |
@@ -69,39 +72,6 @@ EtTree class >> viewRelations: relations [
 			line fromHead: makeCircle value;
 				toHead: makeCircle value
 		].
-
-	"
-	m edges
-		stencil: [ :r | 
-			| toHead |
-			toHead := BlArrowheadTriangle new
-					scale: 4;
-					border: (BlBorder paint: Color gray).
-			r type = #inherit ifTrue: [ toHead background: Color gray ].
-			BlLineElement new
-				border: (BlBorder paint: Color gray);
-				toHead: toHead ];
-		connect: (relations select: [ :r | r type ~= #cognate ])
-			from: #from
-			to: #to.
-
-	m edges
-		stencil: [ :r | 
-			| makeCircle |
-			makeCircle := [ BlArrowheadCircle new
-					scale: 4;
-					border: (BlBorder paint: Color gray) ].
-
-			BlLineElement new
-				border: (BlBorder paint: Color gray);
-				fromHead: makeCircle value;
-				toHead: makeCircle value ];
-		passive;
-		connect: (relations select: [ :r | r type = #cognate ])
-			from: #from
-			to: #to.
-	"
-
 	m layout tree levelDistance: 20.
 	^ m
 ]
