@@ -25,6 +25,7 @@ EtFetcher class >> fetchRecursiveRelations: word [
 		w := nextWords atRandom.
 		nextWords remove: w.
 		visitedWords add: w.
+
 		newRelations := self fetchRelations: w.
 		relations addAll: newRelations.
 		newRelations do: [:r |
@@ -34,6 +35,34 @@ EtFetcher class >> fetchRecursiveRelations: word [
 				nextWords add: w2.
 			]
 		]
+	].
+	^ relations.
+]
+
+{ #category : #accessing }
+EtFetcher class >> fetchRecursiveRelations: word maxIterations: maxIterations [
+	| relations visitedWords nextWords i |
+	relations := OrderedCollection new.
+	visitedWords := Set new.
+	nextWords := { word } asSet.
+	i := 0.
+	[ nextWords size > 0 ] whileTrue: [
+		| w newRelations |
+		w := nextWords atRandom.
+		nextWords remove: w.
+		visitedWords add: w.
+
+		newRelations := self fetchRelations: w.
+		relations addAll: newRelations.
+		newRelations do: [:r |
+			| w2 |
+			w2 := r to.
+			(visitedWords includes: w2) ifFalse: [
+				nextWords add: w2.
+			]
+		].
+		i := i + 1.
+		i >= maxIterations ifTrue: [^ relations].
 	].
 	^ relations.
 ]
@@ -83,7 +112,8 @@ EtFetcher class >> fetchWordText: word [
 	" Find the index of the language section."
 	langIndex := sections detectIndex: [:s |
 		(s at: 'line') = word langName and:
-		[(s at: 'toclevel') = 1]].
+		[(s at: 'toclevel') = 1]
+	] ifNone: [^ '' asWideString].
 	from := ((sections at: langIndex) at: 'byteoffset') + 1.
 	" Find the next top-level section. "
 	langIndex + 1 to: sections size do: [:i |

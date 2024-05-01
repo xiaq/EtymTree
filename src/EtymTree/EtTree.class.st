@@ -12,7 +12,7 @@ EtTree class >> view: relations [
 		stencil: [ :w | 
 			BrLabel new
 				border: (BlBorder paint: Color lightGray);
-				text: w headword;
+				text: w asString;
 				aptitude: BrLabelAptitude new;
 				padding: (BlInsets all: 5) ];
 		with: (relations flatCollectAsSet: [:r | {r from. r to}]).

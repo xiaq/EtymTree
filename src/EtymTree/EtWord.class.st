@@ -47,8 +47,20 @@ EtWord class >> supportedLang: lang [
 ]
 
 { #category : #accessing }
+EtWord >> = other [
+	^ {#class. #headword. #lang} allSatisfy: [:msg |
+		(other perform: msg) = (self perform: msg)
+	]
+]
+
+{ #category : #accessing }
 EtWord >> fetchEtymology [
 	^ EtFetcher fetchWordEtymology: self
+]
+
+{ #category : #accessing }
+EtWord >> hash [
+	^ headword hash bitXor: lang hash
 ]
 
 { #category : #accessing }
