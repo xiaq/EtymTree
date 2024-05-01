@@ -32,6 +32,45 @@ EtTree class >> viewRelations: relations [
 				padding: (BlInsets all: 5) ];
 		with: (relations flatCollectAsSet: [:r | {r from. r to}]).
 
+	self addEdges: m
+		relations: (relations select: [:r | r type = #inherit])
+		do: [:line |
+			line toHead:
+				(BlArrowheadTriangle new
+					scale: 4;
+					border: (BlBorder paint: Color gray);
+					background: Color gray)
+		].
+	self addEdges: m
+		relations: (relations select: [:r | r type = #derive])
+		do: [:line |
+			line fromHead:
+				(BlArrowheadTriangle new
+					scale: 4;
+					border: (BlBorder paint: Color gray);
+					background: Color gray)
+		].
+	self addEdges: m
+		relations: (relations select: [:r | r type = #derive])
+		do: [:line |
+			line toHead:
+				(BlArrowheadTriangle new
+					scale: 4;
+					border: (BlBorder paint: Color gray))
+		].
+	self addEdges: m
+		relations: (relations select: [:r | r type = #cognate])
+		do: [:line |
+			| makeCircle |
+			makeCircle := [ BlArrowheadCircle new
+					scale: 4;
+					border: (BlBorder paint: Color gray) ].
+
+			line fromHead: makeCircle value;
+				toHead: makeCircle value
+		].
+
+	"
 	m edges
 		stencil: [ :r | 
 			| toHead |
@@ -61,6 +100,7 @@ EtTree class >> viewRelations: relations [
 		connect: (relations select: [ :r | r type = #cognate ])
 			from: #from
 			to: #to.
+	"
 
 	m layout tree levelDistance: 20.
 	^ m
