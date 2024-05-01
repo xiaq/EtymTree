@@ -78,7 +78,7 @@ EtTree class >> viewRelations: relations [
 
 { #category : #accessing }
 EtTree class >> viewWord: word [
-	^ self viewRelations: (EtFetcher fetchRecursiveRelations: word)
+	^ self viewRelations: (EtFetcher fetchAncestryRelations: word)
 ]
 
 { #category : #accessing }
