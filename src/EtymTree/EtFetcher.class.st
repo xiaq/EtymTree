@@ -16,27 +16,7 @@ EtFetcher class >> allRegexMatches: str regex: r do: block [
 
 { #category : #accessing }
 EtFetcher class >> fetchRecursiveRelations: word [
-	| relations visitedWords nextWords |
-	relations := OrderedCollection new.
-	visitedWords := Set new.
-	nextWords := { word } asSet.
-	[ nextWords size > 0 ] whileTrue: [
-		| w newRelations |
-		w := nextWords atRandom.
-		nextWords remove: w.
-		visitedWords add: w.
-
-		newRelations := self fetchRelations: w.
-		relations addAll: newRelations.
-		newRelations do: [:r |
-			| w2 |
-			w2 := r to.
-			(visitedWords includes: w2) ifFalse: [
-				nextWords add: w2.
-			]
-		]
-	].
-	^ relations.
+	^ self fetchRecursiveRelations: word maxIterations: 100
 ]
 
 { #category : #accessing }
@@ -48,8 +28,9 @@ EtFetcher class >> fetchRecursiveRelations: word maxIterations: maxIterations [
 	i := 0.
 	[ nextWords size > 0 ] whileTrue: [
 		| w newRelations |
-		Transcript print: ('#{1}: nextWords: {2}, relations: {3}' format: {i. nextWords size. relations size}); cr.
+		Transcript print: ('#{1}: nextWords: {2}, relations: {3}' format: {i. nextWords. relations size}); cr.
 		w := nextWords atRandom.
+		Transcript print: ('  w: {1}' format: {w}); cr.
 		nextWords remove: w.
 		visitedWords add: w.
 

@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-EtTree class >> view: relations [
+EtTree class >> viewRelations: relations [
 	| m |
 	m := GtMondrian new.
 	m nodes
@@ -49,4 +49,14 @@ EtTree class >> view: relations [
 
 	m layout tree levelDistance: 20.
 	^ m
+]
+
+{ #category : #accessing }
+EtTree class >> viewWord: word [
+	self viewRelations: (EtFetcher fetchRecursiveRelations: word)
+]
+
+{ #category : #accessing }
+EtTree class >> viewWord: headword lang: lang [
+	self viewWord: (EtWord new headword: headword lang: lang)
 ]
