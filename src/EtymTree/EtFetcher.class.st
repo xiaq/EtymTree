@@ -51,27 +51,35 @@ EtFetcher class >> fetchRecursiveRelations: word maxIterations: maxIterations [
 
 { #category : #accessing }
 EtFetcher class >> fetchRelations: word [
-	| deriveRx inheritRx text relations cognateRx |
+	| deriveRx inheritRx text relations cognateRx descendantRx argRx argIgnoreRx |
 	text := EtFetcher fetchWordText: word.
 	relations := OrderedCollection new.
-	
-	inheritRx := '\{\{inh(erited)?\|[^|}]*\|([^|}]*)\|([^|}]*)'.
+
+	argRx := '\|([^|}]*)'.
+	argIgnoreRx := '\|[^|}]*'.
+	inheritRx := '\{\{inh(erited)?', argIgnoreRx, argRx, argRx.
 	EtFetcher allRegexMatches: text regex: inheritRx do: [:sub |
 		| to |
 		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
 		relations add: (EtRelation new from: word to: to type: #inherit)
 	].
-	deriveRx := '\{\{der(ived)?\|[^|}]*\|([^|}]*)\|([^|}]*)' .
+	deriveRx := '\{\{der(ived)?', argIgnoreRx, argRx, argRx.
 	EtFetcher allRegexMatches: text regex: deriveRx do: [:sub |
 		| to |
 		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
 		relations add: (EtRelation new from: word to: to type: #derive)
 	].
-	cognateRx := '\{\{cog(nate)?\|([^|}]*)\|([^|}]*)'.
+	cognateRx := '\{\{cog(nate)?', argRx, argRx.
 	EtFetcher allRegexMatches: text regex: cognateRx do: [:sub |
 		| to |
 		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
 		relations add: (EtRelation new from: word to: to type: #cognate)
+	].
+	descendantRx := '\{\{(desc|descendant|desctree|descendants_tree)', argRx, argRx.
+	EtFetcher allRegexMatches: text regex: descendantRx do: [:sub |
+		| to |
+		to := EtWord new headword: (sub at: 3) lang: (sub at: 2).
+		relations add: (EtRelation new from: word to: to type: #descendant)
 	].
 	^ relations select: [:w | EtWord supportedLang: w to lang]
 ]

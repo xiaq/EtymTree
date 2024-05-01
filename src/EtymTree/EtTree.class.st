@@ -5,6 +5,21 @@ Class {
 }
 
 { #category : #accessing }
+EtTree class >> addEdges: m relations: relations do: block [
+	m edges
+		stencil: [ :r |
+			| line |
+			line := BlLineElement new
+				border: (BlBorder paint: Color gray).
+			block value: line.
+			line
+		];
+		connect: relations
+			from: #from
+			to: #to.
+]
+
+{ #category : #accessing }
 EtTree class >> viewRelations: relations [
 	| m |
 	m := GtMondrian new.
@@ -53,10 +68,10 @@ EtTree class >> viewRelations: relations [
 
 { #category : #accessing }
 EtTree class >> viewWord: word [
-	self viewRelations: (EtFetcher fetchRecursiveRelations: word)
+	^ self viewRelations: (EtFetcher fetchRecursiveRelations: word)
 ]
 
 { #category : #accessing }
 EtTree class >> viewWord: headword lang: lang [
-	self viewWord: (EtWord new headword: headword lang: lang)
+	^ self viewWord: (EtWord new headword: headword lang: lang)
 ]
